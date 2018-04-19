@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="BusinessProxy"
+          class="com.dummy.myerp.business.impl.BusinessProxyImpl"
+          scope="singleton"
+          factory-method="getInstance">
+        <constructor-arg ref="DaoProxy"/>
+        <constructor-arg ref="TransactionManager"/>
+    </bean>
+    <!-- Transaction Manager -->
+    <bean id="TransactionManager"
+          class="com.dummy.myerp.business.impl.TransactionManager"
+          scope="singleton"
+          factory-method="getInstance">
+        <constructor-arg ref="txManagerMYERP"/>
+    </bean>
+
+
+    <!-- DaoProxy -->
+    <bean id="DaoProxy" class="com.dummy.myerp.consumer.dao.impl.DaoProxyImpl" factory-method="getInstance">
+        <property name="comptabiliteDao" ref="ComptabiliteDaoImpl"/>
+    </bean>
+
+    <!-- PlatformTransactionManager pour le DataSource MYERP -->
+    <bean id="txManagerMYERP" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSourceMYERPNOTNULL"/>
+    </bean>
+
+    <!-- ==================== Databases ==================== -->
+    <bean id="dataSourceMYERPNOTNULL" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="url" value="jdbc:postgresql://127.0.0.1:9032/db_myerp" />
+        <property name="username" value="usr_myerp" />
+        <property name="password" value="myerp" />
+    </bean>
+
+
+    <!-- ========== ComptabiliteDaoImpl ========== -->
+    <bean id="ComptabiliteDaoImpl" class="com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl"
+          factory-method="getInstance">
+        <property name="SQLgetListCompteComptable">
+            <value>
+                SELECT * FROM myerp.compte_comptable
+            </value>
+        </property>
+        <property name="SQLgetListJournalComptable">
+            <value>
+                SELECT * FROM myerp.journal_comptable
+            </value>
+        </property>
+        <property name="SQLgetValeurJournalComptable">
+            <value>
+                SELECT derniere_valeur FROM myerp.sequence_ecriture_comptable
+                WHERE journal_code = :jcode
+                AND annee = :year
+            </value>
+        </property>
+        <property name="SQLupdateValeurJournalComptable">
+            <value>
+                UPDATE myerp.sequence_ecriture_comptable
+                SET derniere_valeur = :valeur
+                WHERE journal_code = :jcode
+                AND annee = :year
+            </value>
+        </property>
+        <property name="SQLcheckCodeJournalComptable">
+            <value>
+                SELECT code
+                FROM myerp.journal_comptable
+                WHERE code = :jcode
+            </value>
+        </property>
+        <property name="SQLinsertNewValeurJournalComptable">
+            <value>
+                INSERT INTO myerp.sequence_ecriture_comptable (journal_code, annee, derniere_valeur)
+                VALUES (:jcode, :year, :valeur)
+            </value>
+        </property>
+        <property name="SQLgetListEcritureComptable">
+            <value>
+                SELECT * FROM myerp.ecriture_comptable
+            </value>
+        </property>
+        <property name="SQLgetListEcritureComptableDate">
+            <value>
+                SELECT * FROM myerp.ecriture_comptable
+                WHERE date BETWEEN CAST(:date1 as DATE) AND CAST(:date2 as DATE)
+            </value>
+        </property>
+        <property name="SQLgetEcritureComptable">
+            <value>
+                SELECT * FROM myerp.ecriture_comptable
+                WHERE id = :id
+            </value>
+        </property>
+        <property name="SQLgetEcritureComptableByRef">
+            <value>
+                SELECT * FROM myerp.ecriture_comptable
+                WHERE reference = :reference
+            </value>
+        </property>
+        <property name="SQLloadListLigneEcriture">
+            <value>
+                SELECT * FROM myerp.ligne_ecriture_comptable
+                WHERE ecriture_id = :ecriture_id
+                ORDER BY ligne_id
+            </value>
+        </property>
+        <property name="SQLinsertEcritureComptable">
+            <value>
+                INSERT INTO myerp.ecriture_comptable (
+                id, journal_code, reference, date, libelle )
+                VALUES (
+                nextval('myerp.ecriture_comptable_id_seq'),
+                :journal_code, :reference, :date, :libelle )
+            </value>
+        </property>
+        <property name="SQLinsertListLigneEcritureComptable">
+            <value>
+                INSERT INTO myerp.ligne_ecriture_comptable (ecriture_id, ligne_id, compte_comptable_numero, libelle, debit, credit)
+                VALUES (:ecriture_id, :ligne_id, :compte_comptable_numero, :libelle, :debit, :credit)
+            </value>
+        </property>
+        <property name="SQLupdateEcritureComptable">
+            <value>
+                UPDATE myerp.ecriture_comptable SET
+                journal_code = :journal_code,
+                reference = :reference,
+                date = :date,
+                libelle = :libelle
+                WHERE
+                id = :id
+            </value>
+        </property>
+        <property name="SQLdeleteEcritureComptable">
+            <value>
+                DELETE FROM myerp.ecriture_comptable
+                WHERE id = :id
+            </value>
+        </property>
+        <property name="SQLdeleteListLigneEcritureComptable">
+            <value>
+                DELETE FROM myerp.ligne_ecriture_comptable
+                WHERE ecriture_id = :ecriture_id
+            </value>
+        </property>
+    </bean>
+
+
+    <!-- ConsumerHelper -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass" value="com.dummy.myerp.consumer.ConsumerHelper"/>
+        <property name="targetMethod" value="configure"/>
+        <property name="arguments">
+            <list>
+                <ref bean="DaoProxy"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- AbstractDbConsumer -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass" value="com.dummy.myerp.consumer.db.AbstractDbConsumer"/>
+        <property name="targetMethod" value="configure"/>
+        <property name="arguments">
+            <map>
+                <entry value-ref="dataSourceMYERPNOTNULL">
+                    <key>
+                        <value type="com.dummy.myerp.consumer.db.DataSourcesEnum">MYERP</value>
+                    </key>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+</beans>
