@@ -224,8 +224,7 @@ public class ComptabiliteManagerImplTest {
         ectCptble=listEcritures.get(0);
         //modifs pour création d'anomalies dans le format
         ectCptble.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                null, null,
-                new BigDecimal(123)));
+                null, null, new BigDecimal(123.785)));
         ectCptble.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
                 null, new BigDecimal(123), null));
         manager.checkEcritureComptableUnit(ectCptble);
