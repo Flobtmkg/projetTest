@@ -96,12 +96,11 @@
     <!-- Profiles -->
     <!-- =============================================================== -->
     <profiles>
-        <!-- Profile utilisé pour lancer les tests d'intégration de la couche Business -->
+        <!-- Profile utilisé pour lancer les tests d'intégration de la couche Business
         <profile>
             <id>test-business</id>
             <build>
                 <plugins>
-                    <!-- Ajout du répertoire src/test-business/java en tant que source de test du module -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
@@ -130,7 +129,7 @@
                     </testResource>
                 </testResources>
             </build>
-        </profile>
+        </profile>-->
     </profiles>
 
 
