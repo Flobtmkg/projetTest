@@ -2,6 +2,7 @@ sudo: required
 language: java
 env:
   global:
+   - COVERITY_SCAN_TOKEN: "kZ8m2qND99MgxYNUoC8yWw"
    - secure: "mY2YiL7KA6a483sVM7Inl0QJMwMoomYiKl9q9nYtogLO15jeI4i9rG7oMM2MEX6nES6pyj97JUw2G6ZqgbzV3YscjejQeYFgbET+FOuS5PMOwZRvHvl5HVKGYXWqpc1mIhXbvfAd3vzA9PZotU+kYbPQpqK+hnEysJHYSk9BEK8="
 services:
   - docker
