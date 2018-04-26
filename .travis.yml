@@ -2,7 +2,7 @@ sudo: required
 language: java
 env:
   global:
-   - secure: "CEZnBhbn5Sp9Ar6gpu74RaqezJd06W1ElKLjxhMNYScaFn77MDlayOGCEn6Y2OWJrf9/kFAWY/7wlofTJ88aLgfnNcyT8y7E5ocbw4LxyXc9JNAh3gol9IoTpwGWvWP1bIoRr4n2S1pWGhn4Av0hwoTUwb4AneSpj/crYA121zo="
+   - secure: "mY2YiL7KA6a483sVM7Inl0QJMwMoomYiKl9q9nYtogLO15jeI4i9rG7oMM2MEX6nES6pyj97JUw2G6ZqgbzV3YscjejQeYFgbET+FOuS5PMOwZRvHvl5HVKGYXWqpc1mIhXbvfAd3vzA9PZotU+kYbPQpqK+hnEysJHYSk9BEK8="
 services:
   - docker
 jdk:
