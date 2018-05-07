@@ -521,8 +521,6 @@ public class ComptabiliteManagerImplTest {
         vEcritureComptable2.setId(idEcritureEnBase);
         vEcritureComptable2.setDate(new Date());
         //
-        // check
-        manager.checkEcritureComptable(vEcritureComptable2);// On teste l'écriture comptable sur toutes les règles
         // update
         manager.updateEcritureComptable(vEcritureComptable2);// Test de l'écriture en base
         //

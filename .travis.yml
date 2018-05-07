@@ -1,9 +1,6 @@
 sudo: required
 language: java
-env:
-  global:
-   - COVERITY_SCAN_TOKEN: "kZ8m2qND99MgxYNUoC8yWw"
-   - secure: "mY2YiL7KA6a483sVM7Inl0QJMwMoomYiKl9q9nYtogLO15jeI4i9rG7oMM2MEX6nES6pyj97JUw2G6ZqgbzV3YscjejQeYFgbET+FOuS5PMOwZRvHvl5HVKGYXWqpc1mIhXbvfAd3vzA9PZotU+kYbPQpqK+hnEysJHYSk9BEK8="
+
 services:
   - docker
 jdk:
@@ -13,19 +10,8 @@ before_install:
   - docker-compose -v
   - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
-addons:
-  coverity_scan:
-    project:
-      name: "Flobtmkg/projetTest"
-      description: "Build submitted via Travis CI"
-    notification_email: florian.couturier33@gmail.com
-    build_command_prepend: "mvn clean"
-    build_command: "mvn -DskipTests=true compile"
-    branch_pattern: coverity_scan
 before_script:
   - docker-compose up --build -d
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.organization=flobtmkg-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=5c22f6c208e84e94b9e2b30ae7d9b1ffa552cbcd
-  - docker-compose down
-  - docker-compose up --build -d
 after_script:
   - docker-compose down
