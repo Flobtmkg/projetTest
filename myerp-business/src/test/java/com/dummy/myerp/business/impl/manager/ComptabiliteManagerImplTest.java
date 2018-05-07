@@ -505,11 +505,11 @@ public class ComptabiliteManagerImplTest {
         //
         vEcritureComptable2 = (EcritureComptable)vEcritureComptable.clone();
         //
-        // check
+        //
         manager.checkEcritureComptable(vEcritureComptable);// On teste l'écriture comptable sur toutes les règles
         // push
         manager.insertEcritureComptable(vEcritureComptable);// Test de l'écriture en base
-        // pull et check (pas poulet tchècque)
+        // pull et check
         lEcritures = manager.getListEcritureComptable();
         for (EcritureComptable ecr:lEcritures) {
             if(ecr.getReference().equals(vEcritureComptable.getReference())){
@@ -526,7 +526,7 @@ public class ComptabiliteManagerImplTest {
         // update
         manager.updateEcritureComptable(vEcritureComptable2);// Test de l'écriture en base
         //
-        // pull et check (pas poulet tchècque)
+        // pull et check
         lEcritures = manager.getListEcritureComptable();
         for (EcritureComptable ecr:lEcritures) {
             if(ecr.getReference().equals(vEcritureComptable.getReference()) && ecr.getDate().getDate() == vEcritureComptable2.getDate().getDate() && ecr.getDate().getMonth() == vEcritureComptable2.getDate().getMonth() && ecr.getDate().getYear() == vEcritureComptable2.getDate().getYear()){
