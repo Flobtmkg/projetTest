@@ -13,5 +13,7 @@ before_install:
 before_script:
   - docker-compose up --build -d
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.organization=flobtmkg-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=5c22f6c208e84e94b9e2b30ae7d9b1ffa552cbcd
+  - docker-compose
+  - docker-compose up --build -d
 after_script:
   - docker-compose down
